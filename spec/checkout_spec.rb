@@ -1,72 +1,51 @@
-# require 'spec_helper'
-#
-#   describe(Checkout) do
-#     describe(".all") do
-#     it("is empty at first") do
-#       expect(Task.all()).to(eq([]))
-#     end
-#   end
-#
-#   describe('#initialize') do
-#     it('will create a new instance of Task') do
-#       task = Task.new({:name => 'Mow lawn', :description => 'Mow the front lawn soon!', :due_date => 6, :id => nil, :list_id => 1})
-#       task.save
-#       expect(task.name).to(eq('Mow lawn'))
-#       expect(task.description).to(eq('Mow the front lawn soon!'))
-#       expect(task.due_date).to(eq(6))
-#       #expect(task.set_up_date).to(eq(Time.now)) was returning in error due to computer processing time
-#       expect(task.finished).to(eq(false))
-#       expect(task.id).to(be_an_instance_of(Integer))
-#       expect(task.list_id).to(be_an_instance_of(Integer))
-#     end
-#   end
-#
-#   describe('#save') do
-#     it('save the task to the list of tasks') do
-#       task = Task.new({:name => 'Mow lawn', :description => 'Mow the front lawn soon!', :due_date => 6, :id => nil, :list_id => 1})
-#       task.save
-#       expect(Task.all).to(eq([task]))
-#     end
-#   end
-#
-#   describe("#==") do
-#     it("is the same task if it has the same name and list ID") do
-#       task1 = Task.new({:name => 'Mow lawn', :description => 'Mow the front lawn soon!', :due_date => 6, :id => 1, :list_id => 1})
-#       task2 = Task.new({:name => 'Mow lawn', :description => 'Mow the front lawn soon!', :due_date => 6, :id => 1, :list_id => 1})
-#       expect(task1).to(eq(task2))
-#     end
-#   end
-#
-#   describe(".sort") do
-#     it("will sort the tasks by due date") do
-#       task1 = Task.new({:name => 'Do homework', :description => 'Finish math and science assignment!', :due_date => 6, :id => 1, :list_id => 1})
-#       task1.save
-#       task2 = Task.new({:name => 'Mow lawn', :description => 'Mow the front lawn soon!', :due_date => 4, :id => 1, :list_id => 1})
-#       task2.save
-#       task3 = Task.new({:name => 'Fix roof', :description => 'Fix leaky roof!', :due_date => 1, :id => 1, :list_id => 1})
-#       task3.save
-#       expect(Task.sort).to(eq([task3, task2, task1]))
-#     end
-#   end
-#
-#   describe(".find") do
-#     it("find a task based on id") do
-#       task1 = Task.new({:name => 'Do homework', :description => 'Finish math and science assignment!', :due_date => 6, :id => nil, :list_id => 1})
-#       task1.save
-#       task2 = Task.new({:name => 'Mow lawn', :description => 'Mow the front lawn soon!', :due_date => 4, :id => nil, :list_id => 1})
-#       task2.save
-#       id = task1.id
-#       expect(Task.find(id)).to(eq(task1))
-#     end
-#   end
-#
-#   describe(".find_by_list") do
-#     it("find a task based on list id") do
-#       task1 = Task.new({:name => 'Do homework', :description => 'Finish math and science assignment!', :due_date => 6, :id => nil, :list_id => 1})
-#       task1.save
-#       task2 = Task.new({:name => 'Mow lawn', :description => 'Mow the front lawn soon!', :due_date => 4, :id => nil, :list_id => 2})
-#       task2.save
-#       expect(Task.find_by_list(2)).to(eq([task2]))
-#     end
-#   end
-# end
+require('spec_helper')
+
+describe(Checkout) do
+  describe(".all") do
+    it("starts off with no lists") do
+      expect(Checkout.all()).to(eq([]))
+    end
+  end
+
+  describe("#patron") do
+    it("tells you its patron") do
+      list = Checkout.new({:patron => "Epicodus stuff", :book_id => 12, :duedate => '2018-01-01', :id => nil})
+      expect(list.patron()).to(eq("Epicodus stuff"))
+    end
+  end
+
+  describe("#id") do
+    it("sets its ID when you save it") do
+      list = Checkout.new({:patron => "Epicodus stuff", :book_id => 12, :duedate => '2018-01-01', :id => nil})
+      list.save()
+      expect(list.id()).to(be_an_instance_of(Integer))
+    end
+  end
+
+  describe("#save") do
+    it("lets you save lists to the database") do
+      list = Checkout.new({:patron => "Epicodus stuff", :book_id => 12, :duedate => '2018-01-01', :id => nil})
+      list.save()
+      expect(Checkout.all()).to(eq([list]))
+    end
+  end
+
+  describe("#==") do
+    it("is the same list if it has the same patron") do
+      list1 = Checkout.new({:patron => "Epicodus stuff", :book_id => 12, :duedate => '2018-01-01', :id => nil})
+      list2 = Checkout.new({:patron => "Epicodus stuff", :book_id => 12, :duedate => '2018-01-01', :id => nil})
+      expect(list1).to(eq(list2))
+    end
+  end
+
+  describe(".sort") do
+    it("will sort the list by patron") do
+      list1 = Checkout.new({:patron => "Epicodus stuff", :book_id => 12, :duedate => '2018-01-01', :id => 1})
+      list1.save
+      list2 = Checkout.new({:patron => "Stephen King", :book_id => 3245, :duedate => '2018-01-01', :id => 2})
+      list2.save
+      expect(Checkout.sort()).to(eq([list1, list2]))
+    end
+  end
+
+end

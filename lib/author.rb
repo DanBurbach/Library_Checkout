@@ -37,7 +37,6 @@ class Author
   end
 
   def self.sort
-    binding.pry
     returned_authors = DB.exec("SELECT * FROM author ORDER BY books;")
     authors = []
     returned_authors.each() do |author|

@@ -1,53 +1,51 @@
 require'pg'
+require'pry'
 
 
 DB = PG.connect({:dbname => 'library'})
 
 class Patron
-  attr_accessor(:first_name, :last_name, :specialty_id)
+  attr_accessor(:name, :checkout_books)
   attr_reader(:id)
 
   def initialize(attributes)
-    @first_name = attributes.fetch(:first_name)
-    @last_name = attributes.fetch(:last_name)
-    @specialty_id = attributes.fetch(:specialty_id)
+    @name = attributes.fetch(:name)
+    @checkout_books = attributes.fetch(:checkout_books)
     @id = attributes.fetch(:id).to_i rescue nil
   end
 
   def self.all
-    returned_doctors = DB.exec("SELECT * FROM doctors_tb;")
-    doctors = []
-    returned_doctors.each() do |doctor|
-      first_name = doctor.fetch("first_name")
-      last_name = doctor.fetch("last_name")
-      specialty_id = doctor.fetch("specialty_id").to_i
-      id = doctor.fetch("id").to_i()
-      doctors.push(Doctor.new({:first_name => first_name, :last_name => last_name, :specialty_id => specialty_id, :id => id}))
+    returned_patrons = DB.exec("SELECT * FROM patron;")
+    patrons = []
+    returned_patrons.each() do |patron|
+      name = patron.fetch("name")
+      checkout_books = patron.fetch("checkout_books")
+      id = patron.fetch("id").to_i()
+      patrons.push(Patron.new({:name => name, :checkout_books => checkout_books, :id => id}))
     end
-    doctors
+    patrons
   end
 
   def self.find(id)
-    returned_doctors = DB.exec("SELECT * FROM doctors_tb WHERE id = #{id};")
-    returned_doctors.each() do |doctor|
-      first_name = doctor.fetch("first_name")
-      last_name = doctor.fetch("last_name")
-      specialty_id = doctor.fetch("specialty_id").to_i
-      id = doctor.fetch("id").to_i()
-      return Doctor.new({:first_name => first_name, :last_name => last_name, :specialty_id => specialty_id, :id => id})
+    returned_patrons = DB.exec("SELECT * FROM patron WHERE id = #{id};")
+    returned_patrons.each() do |patron|
+      name = patron.fetch("name")
+      checkout_books = patron.fetch("checkout_books")
+      id = patron.fetch("id").to_i()
+      return Patron.new({:name => name, :checkout_books => checkout_books, :id => id})
     end
   end
 
   def save
-    result = DB.exec("INSERT INTO doctors_tb(first_name, last_name, specialty_id) VALUES ('#{@first_name}','#{@last_name}', #{specialty_id}) RETURNING id;")
+    result = DB.exec("INSERT INTO patron (name, checkout_books, id) VALUES ('#{@name}','#{@checkout_books}', #{@id}) RETURNING id;")
     @id = result.first().fetch("id").to_i()
   end
 
-  def ==(another_doctor)
-    self.first_name().==(another_doctor.first_name()).&(self.last_name().==(another_doctor.last_name())).&(self.specialty_id().==(another_doctor.specialty_id()))
+  def ==(another_patron)
+    self.name().==(another_patron.name()).&(self.checkout_books().==(another_patron.checkout_books())).&(self.id().==(another_patron.id()))
   end
 
   def Delete(id)
-    DB.exec("DELETE FROM doctors_tb WHERE id = #{doctor.id};")
+    DB.exec("DELETE FROM patron WHERE id = #{patron.id};")
   end
 end
