@@ -37,4 +37,15 @@ describe(Author) do
       expect(author1).to(eq(author2))
     end
   end
+
+  describe(".sort") do
+    it("will sort the author by name") do
+      author1 = Author.new({:name => "Epicodus stuff", :books => "Funsies", :id => 1})
+      author1.save
+      author2 = Author.new({:name => "Stephen King", :books => "Carrie", :id => 2})
+      author2.save
+      expect(Author.sort()).to(eq([author2, author1]))
+    end
+  end
+
 end

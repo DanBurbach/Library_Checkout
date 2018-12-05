@@ -1,4 +1,5 @@
 require'pg'
+require'pry'
 
 
 DB = PG.connect({:dbname => 'library'})
@@ -33,6 +34,19 @@ class Author
       id = author.fetch("id").to_i()
       return Author.new({:name => name, :books => books, :id => id})
     end
+  end
+
+  def self.sort
+    binding.pry
+    returned_authors = DB.exec("SELECT * FROM author ORDER BY books;")
+    authors = []
+    returned_authors.each() do |author|
+      name = author.fetch("name")
+      books = author.fetch("books")
+      id = author.fetch("id").to_i()
+      authors.push(Author.new({:name => name, :books => books, :id => id}))
+    end
+    authors
   end
 
   def save
