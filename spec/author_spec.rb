@@ -48,4 +48,24 @@ describe(Author) do
     end
   end
 
+  describe("#delete") do
+    it("lets you delete a author from the database") do
+      author1 = Author.new({:name => "Epicodus stuff", :books => "Funsies", :id => 1})
+      author1.save
+      author2 = Author.new({:name => "Stephen King", :books => "Carrie", :id => 2})
+      author2.save
+      author1.delete()
+      expect(Author.all()).to(eq([author2]))
+    end
+  end
+
+  describe("#update") do
+    it("lets you update status in the database") do
+      author = Author.new({:name => "Epicodus stuff", :books => "Funsies", :id => 1})
+      author.save
+      author.update({:books => "Scott"})
+      expect(author.books()).to(eq("Scott"))
+    end
+  end
+
 end

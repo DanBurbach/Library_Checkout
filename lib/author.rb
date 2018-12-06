@@ -57,7 +57,14 @@ class Author
     self.name().==(another_author.name()).&(self.books().==(another_author.books()))
   end
 
-  def Delete(id)
-    DB.exec("DELETE FROM authors_tb WHERE id = #{author.id};")
+  def delete()
+    returned_books = DB.exec("DELETE FROM author WHERE id = #{self.id()};")
   end
+
+  def update(attributes)
+    @books = attributes.fetch(:books)
+    @id = self.id()
+    DB.exec("UPDATE author SET books = '#{@books}' WHERE id = #{@id};")
+  end
+
 end

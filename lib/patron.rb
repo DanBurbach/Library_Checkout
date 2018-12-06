@@ -45,7 +45,14 @@ class Patron
     self.name().==(another_patron.name()).&(self.checkout_books().==(another_patron.checkout_books())).&(self.id().==(another_patron.id()))
   end
 
-  def Delete(id)
-    DB.exec("DELETE FROM patron WHERE id = #{patron.id};")
+  def update(attributes)
+    @name = attributes.fetch(:name)
+    @id = self.id()
+    DB.exec("UPDATE patron SET name = '#{@name}' WHERE id = #{@id};")
   end
+
+  def delete()
+    returned_books = DB.exec("DELETE FROM patron WHERE id = #{self.id()};")
+  end
+
 end

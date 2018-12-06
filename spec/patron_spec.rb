@@ -54,6 +54,26 @@ require 'spec_helper'
     end
   end
 
+  describe("#delete") do
+    it("lets you delete a patron from the database") do
+      patron1 = Patron.new({:name => 'Do homework', :checkout_books => 'Finish math and science assignment!', :id => 1})
+      patron1.save
+      patron2 = Patron.new({:name => 'Mow lawn', :checkout_books => 'Mow the front lawn soon!', :id => 2})
+      patron2.save
+      patron1.delete()
+      expect(Patron.all()).to(eq([patron2]))
+    end
+  end
+
+  describe("#update") do
+    it("lets you update status in the database") do
+      patron1 = Patron.new({:name => 'Do homework', :checkout_books => 'Finish math and science assignment!', :id => 1})
+      patron1.save
+      patron1.update({:name => "Scott"})
+      expect(patron1.name()).to(eq("Scott"))
+    end
+  end
+
   # describe(".find_by_list") do
   #   it("find a patron based on list id") do
   #     patron1 = Patron.new({:name => 'Do homework', :checkout_books => 'Finish math and science assignment!', :id => nil})

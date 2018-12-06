@@ -58,12 +58,17 @@ class Book
     @id = result.first().fetch("id").to_i()
   end
 
-  def ==(another_book)
-    (self.title().==(another_book.title())).&(self.author().==(another_book.author())).&(self.status().==(another_book.status())).&(self.id().==(another_book.id()))
+  def update(attributes)
+    @status = attributes.fetch(:status)
+    @id = self.id()
+    DB.exec("UPDATE book SET status = '#{@status}' WHERE id = #{@id};")
   end
 
-  def delete(id)
-    binding.pry
-    returned_books = DB.exec("DELETE FROM book WHERE id = #{id};")
+  def delete()
+    returned_books = DB.exec("DELETE FROM book WHERE id = #{self.id()};")
+  end
+
+  def ==(another_book)
+    (self.title().==(another_book.title())).&(self.author().==(another_book.author())).&(self.status().==(another_book.status())).&(self.id().==(another_book.id()))
   end
 end

@@ -58,12 +58,23 @@ require 'spec_helper'
     end
   end
 
-  describe("delete") do
-    it("delete a book based on id") do
+  describe("#update") do
+    it("lets you update status in the database") do
+      book = Book.new({:title => 'Mow lawn', :author => 'Mow the front lawn soon!', :status => "t", :id => nil})
+      book.save()
+      book.update({:status => "f"})
+      expect(book.status()).to(eq("f"))
+    end
+  end
+
+  describe("#delete") do
+    it("lets you delete a book from the database") do
       book1 = Book.new({:title => 'Do homework', :author => 'Finish math and science assignment!', :status => "t", :id => 1})
       book1.save
-      id = book1.id
-      expect(Book.delete(id)).to(eq([]))
+      book2 = Book.new({:title => 'Procrastination', :author => 'I dont wanna do it!', :status => "f", :id => 2})
+      book2.save
+      book1.delete()
+      expect(Book.all()).to(eq([book2]))
     end
   end
 
