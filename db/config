@@ -1,0 +1,5 @@
+CREATE DATABASE Library
+CREATE TABLE book (id serial PRIMARY KEY, author varchar, title varchar, status boolean);
+CREATE TABLE patron (id serial PRIMARY KEY, name varchar, checkout_books varchar);
+CREATE TABLE checkout (id serial PRIMARY KEY, duedate date, book_id int);
+CREATE TABLE author (id serial PRIMARY KEY, name varchar, books varchar);

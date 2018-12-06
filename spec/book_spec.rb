@@ -58,6 +58,15 @@ require 'spec_helper'
     end
   end
 
+  describe("delete") do
+    it("delete a book based on id") do
+      book1 = Book.new({:title => 'Do homework', :author => 'Finish math and science assignment!', :status => "t", :id => 1})
+      book1.save
+      id = book1.id
+      expect(Book.delete(id)).to(eq([]))
+    end
+  end
+
   # describe(".find_by_list") do
   #   it("find a book based on list id") do
   #     book1 = Book.new({:title => 'Do homework', :author => 'Finish math and science assignment!', :status => "t", :id => nil})

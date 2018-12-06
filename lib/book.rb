@@ -62,7 +62,8 @@ class Book
     (self.title().==(another_book.title())).&(self.author().==(another_book.author())).&(self.status().==(another_book.status())).&(self.id().==(another_book.id()))
   end
 
-  def Delete(id)
-    DB.exec("DELETE FROM book WHERE id = #{book.id};")
+  def delete(id)
+    binding.pry
+    returned_books = DB.exec("DELETE FROM book WHERE id = #{id};")
   end
 end
